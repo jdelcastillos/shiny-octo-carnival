@@ -1,0 +1,81 @@
+name: wf-app-msbuild-codedeploy-ecs
+
+on:
+  workflow_call:
+    inputs:
+      build-file:
+        required: false
+        type: string
+        description: 'nombre del archivo .sln del proyecto'
+     
+
+permissions:
+  contents: read
+  id-token: write
+  issues: write
+
+jobs:
+   environment:
+    name: 🎭 environment
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }} || ${{ github.event_name == 'pull_request' }}
+    outputs:
+      environment: ${{ steps.set-environment.outputs.environment }}
+      repository_name: ${{ steps.convert-to-lowercase.outputs.repository_name }}
+    steps:
+      - name: 🎭 Set Environment
+        id: set-environment
+        run: |
+          case ${{github.ref}} in
+            refs/heads/master)
+              echo "environment=prd" >> $GITHUB_OUTPUT
+            ;;
+            refs/heads/main)
+              echo "environment=prd" >> $GITHUB_OUTPUT
+            ;;
+            refs/heads/hotfix/*)
+              echo "environment=uat" >> $GITHUB_OUTPUT
+            ;;
+            refs/heads/release/*)
+              echo "environment=qas" >> $GITHUB_OUTPUT
+            ;;  
+            refs/heads/develop)
+             echo "environment=dev" >> $GITHUB_OUTPUT
+            ;;
+            refs/heads/dev)
+             echo "environment=dev" >> $GITHUB_OUTPUT
+            ;;
+            refs/heads/feature/*)
+             echo "environment=dev" >> $GITHUB_OUTPUT
+            ;;
+            refs/pull/**)
+              var="${{github.head_ref}}"
+              if [[ -z $var ]]; then
+                echo "vacia"
+              else
+                case $var in
+                  feature/*)
+                    echo "environment=dev" >> $GITHUB_OUTPUT
+                  ;;
+                  release/*)
+                    echo "environment=qas" >> $GITHUB_OUTPUT
+                  ;;
+                  feat/*)
+                    echo "environment=dev" >> $GITHUB_OUTPUT
+                  ;;
+                esac
+              fi
+            ;;
+            esac
+      - name: Convert to Lowercase
+        id: convert-to-lowercase
+        run: |
+          echo "::set-output name=repository_name::$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]')"
+
+    lint:
+        name: 📐 TEST
+        runs-on: ubuntu-latest
+        needs: [environment]
+        steps:
+            - name: echo env
+              run: echo "ENV: ${{needs.environment.outputs.environment}}
