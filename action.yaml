@@ -33,9 +33,9 @@ runs:
           pattern=$(_jq '.pattern')
           value=$(_jq '.value')
 
-          echo "File: ${file}"
-          echo "Pattern: ${pattern}"
-          echo "Value: ${value}"
+          echo "File: ${file}"  >> $env:GITHUB_OUTPUT
+          echo "Pattern: ${pattern}"  >> $env:GITHUB_OUTPUT
+          echo "Value: ${value}"  >> $env:GITHUB_OUTPUT
         done
 
         
