@@ -28,9 +28,9 @@ runs:
       shell: bash
       run: |
         if [[ "${{inputs.event)}}" == push ]]
-          echo "branch=${{inputs.branch-push)}}" >> $GITHUB_ENV
+          echo "branch=${{inputs.branch-push}}" >> $GITHUB_ENV
         elif [[ "${{inputs.event)}}" == pull_request ]]
-          echo "branch=${{inputs.branch-pr-target)}}" >> $GITHUB_ENV
+          echo "branch=${{inputs.branch-pr-target}}" >> $GITHUB_ENV
     - name: "gitflow - env Prd"
       if: ${{ (inputs.branching-model == 'gitflow') }} 
       run: |
