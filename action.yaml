@@ -17,7 +17,7 @@ runs:
   using: "composite"
   steps:
     - name: "gitflow - env Prd"
-      if: ${{inputs.branching-model}} == 'gitflow'
+      if: ${{ (inputs.branching-model == 'gitflow') }} 
       run: |
         if [[ "${{ inputs.branch }}" == feature/* ]]; then
           echo "environment=DEVELOP" >> $GITHUB_ENV
