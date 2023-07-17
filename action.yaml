@@ -16,7 +16,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: gitflow - env Prd
+    - name: "gitflow - env Prd"
       if: ${{inputs.branching-model=="gitflow" }}
       run: |
         if [[ "${{ inputs.branch }}" == feature/* ]]; then
