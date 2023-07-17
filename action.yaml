@@ -49,7 +49,7 @@ runs:
     - name: "gitflow - Somos Belcorp"
       if: ${{ (inputs.branching-model == 'gitflow-somosbelcorp') }} 
       run: |
-        if [[ $BRANCH == feature/* ]]; then
+        if [[ $BRANCH == feature/* ||  $BRANCH == feat/* ]]; then
           echo "ENVIRONMENT=QAS" >> $GITHUB_ENV
         elif [[ $BRANCH == release/* || $BRANCH == qas ]]; then
           echo "ENVIRONMENT=QAS" >> $GITHUB_ENV
