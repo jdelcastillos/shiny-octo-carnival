@@ -19,11 +19,22 @@ runs:
     - name: "gitflow - env Prd"
       if: ${{ (inputs.branching-model == 'gitflow') }} 
       run: |
-        if [[ "${{ inputs.branch }}" == feature/* ]]; then
+        if [[ "${{ inputs.branch }}" == refs/heads/feature/* ]]; then
           echo "environment=DEVELOP" >> $GITHUB_ENV
-        elif [[ "${{ inputs.branch }}" == release/* ]]; then
+        elif [[ "${{ inputs.branch }}" == refs/heads/release/* ]]; then
           echo "environment=QAS" >> $GITHUB_ENV
-        elif [[ "${{ inputs.branch }}" == main ]]; then
+        elif [[ "${{ inputs.branch }}" == refs/heads/main || "${{ inputs.branch }}" == refs/heads/master ]]; then
+          echo "environment=PRD" >> $GITHUB_ENV
+        fi
+      shell: bash
+    - name: "gitflow - Somos Belcorp"
+      if: ${{ (inputs.branching-model == 'gitflow') }} 
+      run: |
+        if [[ "${{ inputs.branch }}" == refs/heads/feature/* ]]; then
+          echo "environment=DEVELOP" >> $GITHUB_ENV
+        elif [[ "${{ inputs.branch }}" == refs/heads/release/* || "${{ inputs.branch }}" == refs/heads/qas ]]; then
+          echo "environment=QAS" >> $GITHUB_ENV
+        elif [[ "${{ inputs.branch }}" == refs/heads/main || "${{ inputs.branch }}" == refs/heads/master ]]; then
           echo "environment=PRD" >> $GITHUB_ENV
         fi
       shell: bash
