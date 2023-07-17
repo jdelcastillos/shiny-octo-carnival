@@ -34,4 +34,6 @@ runs:
           echo "File: ${file}"
           echo "Pattern: ${pattern}"
           echo "Value: ${value}"
+        done
+
         
