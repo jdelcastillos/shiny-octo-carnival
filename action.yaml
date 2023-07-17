@@ -21,8 +21,8 @@ runs:
     - name: Iterate JSON array and echo values
       shell: bash
       run: |
-        ls >> $env:GITHUB_OUTPUT
-        cat items.json >> $env:GITHUB_OUTPUT
+        ls >> $GITHUB_OUTPUT
+        cat items.json >> $GITHUB_OUTPUT
         items=$(cat items.json)
         for row in $(echo "${items}" | jq -r '.[] | @base64'); do
           _jq() {
@@ -33,9 +33,9 @@ runs:
           pattern=$(_jq '.pattern')
           value=$(_jq '.value')
 
-          echo "File: ${file}"  >> $env:GITHUB_OUTPUT
-          echo "Pattern: ${pattern}"  >> $env:GITHUB_OUTPUT
-          echo "Value: ${value}"  >> $env:GITHUB_OUTPUT
+          echo "File: ${file}"  >> $GITHUB_OUTPUT
+          echo "Pattern: ${pattern}"  >> $GITHUB_OUTPUT
+          echo "Value: ${value}"  >> $GITHUB_OUTPUT
         done
 
         
