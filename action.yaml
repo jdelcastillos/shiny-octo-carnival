@@ -20,7 +20,7 @@ inputs:
 outputs:
   environment:
     description: "Environment target"
-    value: ${{ steps.output_environment.outputs.environment }}
+    value: ${{ steps.output_environment.outputs.ENVIRONMENT }}
 runs:
   using: "composite"
   steps:
@@ -39,42 +39,42 @@ runs:
       if: ${{ (inputs.branching-model == 'gitflow') }} 
       run: |
         if [[ $BRANCH == feature/* ||  $BRANCH == feat/* ]]; then
-          echo "environment=DEVELOP" >> $GITHUB_ENV
+          echo "ENVIRONMENT=DEVELOP" >> $GITHUB_ENV
         elif [[ $BRANCH == release/* ]]; then
-          echo "environment=QAS" >> $GITHUB_ENV
+          echo "ENVIRONMENT=QAS" >> $GITHUB_ENV
         elif [[ $BRANCH == main || $BRANCH == master ]]; then
-          echo "environment=PRD" >> $GITHUB_ENV
+          echo "ENVIRONMENT=PRD" >> $GITHUB_ENV
         fi
       shell: bash
     - name: "gitflow - Somos Belcorp"
       if: ${{ (inputs.branching-model == 'gitflow-somosbelcorp') }} 
       run: |
         if [[ $BRANCH == feature/* ]]; then
-          echo "environment=DEVELOP" >> $GITHUB_ENV
+          echo "ENVIRONMENT=DEVELOP" >> $GITHUB_ENV
         elif [[ $BRANCH == release/* || $BRANCH == qas ]]; then
-          echo "environment=QAS" >> $GITHUB_ENV
+          echo "ENVIRONMENT=QAS" >> $GITHUB_ENV
         elif [[ $BRANCH == main || $BRANCH == master ]]; then
-          echo "environment=PRD" >> $GITHUB_ENV
+          echo "ENVIRONMENT=PRD" >> $GITHUB_ENV
         elif [[ $BRANCH == revamp ]]; then
-          echo "environment=revamp" >> $GITHUB_ENV
+          echo "ENVIRONMENT=revamp" >> $GITHUB_ENV
         elif [[ $BRANCH == SBGANAQA ]]; then
-          echo "environment=SBGANAQA" >> $GITHUB_ENV
+          echo "ENVIRONMENT=SBGANAQA" >> $GITHUB_ENV
         elif [[ $BRANCH == SBEPDQA ]]; then
-          echo "environment=SBEPDQA" >> $GITHUB_ENV
+          echo "ENVIRONMENT=SBEPDQA" >> $GITHUB_ENV
         elif [[ $BRANCH == SBUNETEQAMC ]]; then
-          echo "environment=SBUNETEQAMC" >> $GITHUB_ENV
+          echo "ENVIRONMENT=SBUNETEQAMC" >> $GITHUB_ENV
         elif [[ $BRANCH == SBBPTQA ]]; then
-          echo "environment=SBBPTQA" >> $GITHUB_ENV
+          echo "ENVIRONMENT=SBBPTQA" >> $GITHUB_ENV
         elif [[ $BRANCH == SBTSQA ]]; then
-          echo "environment=SBTSQA" >> $GITHUB_ENV
+          echo "ENVIRONMENT=SBTSQA" >> $GITHUB_ENV
         elif [[ $BRANCH == ppr ]]; then
-          echo "environment=PPR" >> $GITHUB_ENV
+          echo "ENVIRONMENT=PPR" >> $GITHUB_ENV
         elif [[ $BRANCH == pprfix ]]; then
-          echo "environment=PPRFIX" >> $GITHUB_ENV
+          echo "ENVIRONMENT=PPRFIX" >> $GITHUB_ENV
         fi
       shell: bash
-    - id: output_environment
-      run: echo "environment=$ENVIRONMENT" >> $GITHUB_OUTPUT
+    - id: output_ENVIRONMENT
+      run: echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
       shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
