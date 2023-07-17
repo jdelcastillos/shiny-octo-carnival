@@ -50,7 +50,7 @@ runs:
       if: ${{ (inputs.branching-model == 'gitflow-somosbelcorp') }} 
       run: |
         if [[ $BRANCH == feature/* ]]; then
-          echo "ENVIRONMENT=DEVELOP" >> $GITHUB_ENV
+          echo "ENVIRONMENT=QAS" >> $GITHUB_ENV
         elif [[ $BRANCH == release/* || $BRANCH == qas ]]; then
           echo "ENVIRONMENT=QAS" >> $GITHUB_ENV
         elif [[ $BRANCH == main || $BRANCH == master ]]; then
