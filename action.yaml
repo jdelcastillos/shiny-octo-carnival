@@ -1,80 +1,37 @@
-name: 'Hello World'
-description: 'Greet someone'
+name: Iterate JSON Array
+
+description: Iterate through a JSON array and echo the values of each item
+
 inputs:
-  branching-model:  # id of input
-    description: 'Branching model of the project'
+  json_array:
+    description: 'JSON array with items containing "file", "pattern", and "value" fields'
     required: true
-    default: 'gitflow'
-  branch-push:
-    description: 'Branch that is running the action'
-    required: true
-    default: 'develop' 
-  branch-pr-target:
-    description: 'Branch that is target for the pullrequest'
-    required: true
-    default: '' 
-  event:
-    description: 'Github action event: push or pull_request'
-    required: true
-    default: '' 
-outputs:
-  environment:
-    description: "Environment target"
-    value: ${{ steps.output_environment.outputs.ENVIRONMENT }}
+    default: '[]'
+
 runs:
   using: "composite"
   steps:
-    - name: "define branch"
+    - name: Parse JSON array
+      id: parse_json
       shell: bash
       run: |
-        if [[ "${{inputs.event}}" == push ]]; then
-          echo "BRANCH=${{inputs.branch-push}}" >> $GITHUB_ENV
-        elif [[ "${{inputs.event}}" == pull_request ]]; then
-          echo "BRANCH=${{inputs.branch-pr-target}}" >> $GITHUB_ENV
-        fi
-    - id: output_branch
-      run: echo "BRANCH=$BRANCH" >> $GITHUB_OUTPUT
+        echo "::set-output name=items::${{ inputs.json_array }}"
+        echo "${{ inputs.json_array }}" > items.json
+
+    - name: Iterate JSON array and echo values
       shell: bash
-    - name: "gitflow - env Prd"
-      if: ${{ (inputs.branching-model == 'gitflow') }} 
       run: |
-        if [[ $BRANCH == feature/* ||  $BRANCH == feat/* ]]; then
-          echo "ENVIRONMENT=DEVELOP" >> $GITHUB_ENV
-        elif [[ $BRANCH == release/* ]]; then
-          echo "ENVIRONMENT=QAS" >> $GITHUB_ENV
-        elif [[ $BRANCH == main || $BRANCH == master ]]; then
-          echo "ENVIRONMENT=PRD" >> $GITHUB_ENV
-        fi
-      shell: bash
-    - name: "gitflow - Somos Belcorp"
-      if: ${{ (inputs.branching-model == 'gitflow-somosbelcorp') }} 
-      run: |
-        if [[ $BRANCH == feature/* ||  $BRANCH == feat/* ]]; then
-          echo "ENVIRONMENT=QA" >> $GITHUB_ENV
-        elif [[ $BRANCH == release/* || $BRANCH == qas ]]; then
-          echo "ENVIRONMENT=QA" >> $GITHUB_ENV
-        elif [[ $BRANCH == main || $BRANCH == master ]]; then
-          echo "ENVIRONMENT=PRD" >> $GITHUB_ENV
-        elif [[ $BRANCH == revamp ]]; then
-          echo "ENVIRONMENT=revamp" >> $GITHUB_ENV
-        elif [[ $BRANCH == SBGANAQA ]]; then
-          echo "ENVIRONMENT=SBGANAQA" >> $GITHUB_ENV
-        elif [[ $BRANCH == SBEPDQA ]]; then
-          echo "ENVIRONMENT=SBEPDQA" >> $GITHUB_ENV
-        elif [[ $BRANCH == SBUNETEQAMC ]]; then
-          echo "ENVIRONMENT=SBUNETEQAMC" >> $GITHUB_ENV
-        elif [[ $BRANCH == SBBPTQA ]]; then
-          echo "ENVIRONMENT=SBBPTQA" >> $GITHUB_ENV
-        elif [[ $BRANCH == SBTSQA ]]; then
-          echo "ENVIRONMENT=SBTSQA" >> $GITHUB_ENV
-        elif [[ $BRANCH == ppr ]]; then
-          echo "ENVIRONMENT=PPR" >> $GITHUB_ENV
-        elif [[ $BRANCH == pprfix ]]; then
-          echo "ENVIRONMENT=PPRFIX" >> $GITHUB_ENV
-        fi
-      shell: bash
-    - id: output_ENVIRONMENT
-      run: echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
-      shell: bash
-    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
-      shell: bash
+        items=$(cat items.json)
+        for row in $(echo "${items}" | jq -r '.[] | @base64'); do
+          _jq() {
+            echo ${row} | base64 --decode | jq -r ${1}
+          }
+
+          file=$(_jq '.file')
+          pattern=$(_jq '.pattern')
+          value=$(_jq '.value')
+
+          echo "File: ${file}"
+          echo "Pattern: ${pattern}"
+          echo "Value: ${value}"
+        }
