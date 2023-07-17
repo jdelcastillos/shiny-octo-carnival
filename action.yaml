@@ -35,39 +35,38 @@ runs:
     - name: "gitflow - env Prd"
       if: ${{ (inputs.branching-model == 'gitflow') }} 
       run: |
-        if [[ $BRANCH == refs/heads/feature/* ||  $BRANCH == refs/heads/feat/* ]]; then
+        if [[ $BRANCH == feature/* ||  $BRANCH == feat/* ]]; then
           echo "environment=DEVELOP" >> $GITHUB_ENV
-        elif [[ $BRANCH == refs/heads/release/* ]]; then
+        elif [[ $BRANCH == release/* ]]; then
           echo "environment=QAS" >> $GITHUB_ENV
-        elif [[ $BRANCH == refs/heads/main || $BRANCH == refs/heads/master ]]; then
+        elif [[ $BRANCH == main || $BRANCH == master ]]; then
           echo "environment=PRD" >> $GITHUB_ENV
         fi
-        echo $BRANCH
       shell: bash
     - name: "gitflow - Somos Belcorp"
       if: ${{ (inputs.branching-model == 'gitflow-somosbelcorp') }} 
       run: |
-        if [[ $BRANCH == refs/heads/feature/* ]]; then
+        if [[ $BRANCH == feature/* ]]; then
           echo "environment=DEVELOP" >> $GITHUB_ENV
-        elif [[ $BRANCH == refs/heads/release/* || $BRANCH == refs/heads/qas ]]; then
+        elif [[ $BRANCH == release/* || $BRANCH == qas ]]; then
           echo "environment=QAS" >> $GITHUB_ENV
-        elif [[ $BRANCH == refs/heads/main || $BRANCH == refs/heads/master ]]; then
+        elif [[ $BRANCH == main || $BRANCH == master ]]; then
           echo "environment=PRD" >> $GITHUB_ENV
-        elif [[ $BRANCH == refs/heads/revamp ]]; then
+        elif [[ $BRANCH == revamp ]]; then
           echo "environment=revamp" >> $GITHUB_ENV
-        elif [[ $BRANCH == refs/heads/SBGANAQA ]]; then
+        elif [[ $BRANCH == SBGANAQA ]]; then
           echo "environment=SBGANAQA" >> $GITHUB_ENV
-        elif [[ $BRANCH == refs/heads/SBEPDQA ]]; then
+        elif [[ $BRANCH == SBEPDQA ]]; then
           echo "environment=SBEPDQA" >> $GITHUB_ENV
-        elif [[ $BRANCH == refs/heads/SBUNETEQAMC ]]; then
+        elif [[ $BRANCH == SBUNETEQAMC ]]; then
           echo "environment=SBUNETEQAMC" >> $GITHUB_ENV
-        elif [[ $BRANCH == refs/heads/SBBPTQA ]]; then
+        elif [[ $BRANCH == SBBPTQA ]]; then
           echo "environment=SBBPTQA" >> $GITHUB_ENV
-        elif [[ $BRANCH == refs/heads/SBTSQA ]]; then
+        elif [[ $BRANCH == SBTSQA ]]; then
           echo "environment=SBTSQA" >> $GITHUB_ENV
-        elif [[ $BRANCH == refs/heads/ppr ]]; then
+        elif [[ $BRANCH == ppr ]]; then
           echo "environment=PPR" >> $GITHUB_ENV
-        elif [[ $BRANCH == refs/heads/pprfix ]]; then
+        elif [[ $BRANCH == pprfix ]]; then
           echo "environment=PPRFIX" >> $GITHUB_ENV
         fi
       shell: bash
