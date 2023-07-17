@@ -27,10 +27,11 @@ runs:
     - name: "define branch"
       shell: bash
       run: |
-        if [[ "${{inputs.event}}" == push ]]
+        if [[ "${{inputs.event}}" == push ]]; then
           echo "branch=${{inputs.branch-push}}" >> $GITHUB_ENV
-        elif [[ "${{inputs.event}}" == pull_request ]]
+        elif [[ "${{inputs.event}}" == pull_request ]]; then
           echo "branch=${{inputs.branch-pr-target}}" >> $GITHUB_ENV
+        fi
     - name: "gitflow - env Prd"
       if: ${{ (inputs.branching-model == 'gitflow') }} 
       run: |
