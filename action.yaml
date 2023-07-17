@@ -32,6 +32,8 @@ runs:
         elif [[ "${{inputs.event}}" == pull_request ]]; then
           echo "branch=${{inputs.branch-pr-target}}" >> $GITHUB_ENV
         fi
+        echo $BRANCH
+        echo "BRANCH=$BRANCH" >> $GITHUB_OUTPUT
     - name: "gitflow - env Prd"
       if: ${{ (inputs.branching-model == 'gitflow') }} 
       run: |
