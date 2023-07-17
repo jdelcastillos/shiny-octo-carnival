@@ -19,7 +19,7 @@ runs:
     - name: "gitflow - env Prd"
       if: ${{ (inputs.branching-model == 'gitflow') }} 
       run: |
-        if [[ "${{ inputs.branch }}" == refs/heads/feature/* ]]; then
+        if [[ "${{ inputs.branch }}" == refs/heads/feature/* ||  "${{ inputs.branch }}" == refs/heads/feat/* ]]; then
           echo "environment=DEVELOP" >> $GITHUB_ENV
         elif [[ "${{ inputs.branch }}" == refs/heads/release/* ]]; then
           echo "environment=QAS" >> $GITHUB_ENV
@@ -36,6 +36,22 @@ runs:
           echo "environment=QAS" >> $GITHUB_ENV
         elif [[ "${{ inputs.branch }}" == refs/heads/main || "${{ inputs.branch }}" == refs/heads/master ]]; then
           echo "environment=PRD" >> $GITHUB_ENV
+        elif [[ "${{ inputs.branch }}" == refs/heads/revamp ]]; then
+          echo "environment=revamp" >> $GITHUB_ENV
+        elif [[ "${{ inputs.branch }}" == refs/heads/SBGANAQA ]]; then
+          echo "environment=SBGANAQA" >> $GITHUB_ENV
+        elif [[ "${{ inputs.branch }}" == refs/heads/SBEPDQA ]]; then
+          echo "environment=SBEPDQA" >> $GITHUB_ENV
+        elif [[ "${{ inputs.branch }}" == refs/heads/SBUNETEQAMC ]]; then
+          echo "environment=SBUNETEQAMC" >> $GITHUB_ENV
+        elif [[ "${{ inputs.branch }}" == refs/heads/SBBPTQA ]]; then
+          echo "environment=SBBPTQA" >> $GITHUB_ENV
+        elif [[ "${{ inputs.branch }}" == refs/heads/SBTSQA ]]; then
+          echo "environment=SBTSQA" >> $GITHUB_ENV
+        elif [[ "${{ inputs.branch }}" == refs/heads/ppr ]]; then
+          echo "environment=PPR" >> $GITHUB_ENV
+        elif [[ "${{ inputs.branch }}" == refs/heads/pprfix ]]; then
+          echo "environment=PPRFIX" >> $GITHUB_ENV
         fi
       shell: bash
     - id: output_environment
