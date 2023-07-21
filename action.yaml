@@ -1,41 +1,17 @@
-name: Iterate JSON Array
-
-description: Iterate through a JSON array and echo the values of each item
-
+name: 'Get Repository Variable'
+description: 'Get the value of a repository variable'
 inputs:
-  json_array:
-    description: 'JSON array with items containing "file", "pattern", and "value" fields'
+  variable-name:
+    description: 'Name of the repository variable'
     required: true
-    default: '[]'
-
+    default: ''
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
-    - name: Parse JSON array
-      id: parse_json
+    - name: Get Repository Variable Value
+      id: get_variable
+      run: echo ${{ env[inputs.variable-name] }}
       shell: bash
-      run: |
-        echo "::set-output name=items::${{ inputs.json_array }}"
-        echo "${{ inputs.json_array }}" > items.json
-
-    - name: Iterate JSON array and echo values
+    - name: Set Output
       shell: bash
-      run: |
-        ls >> $GITHUB_OUTPUT
-        cat items.json >> $GITHUB_OUTPUT
-        items=$(cat items.json)
-        for row in $(echo "${items}" | jq -r '.[] | @base64'); do
-          _jq() {
-            echo ${row} | base64 --decode | jq -r ${1}
-          }
-
-          file=$(_jq '.file')
-          pattern=$(_jq '.pattern')
-          value=$(_jq '.value')
-
-          echo "File: ${file}"  >> $GITHUB_OUTPUT
-          echo "Pattern: ${pattern}"  >> $GITHUB_OUTPUT
-          echo "Value: ${value}"  >> $GITHUB_OUTPUT
-        done
-
-        
+      run: echo "value=${{ steps.get_variable.outputs.value }}" >> $GITHUB_ENV
