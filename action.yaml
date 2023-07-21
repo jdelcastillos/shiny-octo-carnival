@@ -10,8 +10,12 @@ runs:
   steps:
     - name: Get Repository Variable Value
       id: get_variable
-      run: echo ${{ env[inputs.variable-name] }}
+      run: |
+             echo "VARIABLE=${{ env[inputs.variable-name] }}" >> $GITHUB_ENV
       shell: bash
     - name: Set Output
       shell: bash
-      run: echo "value=${{ steps.get_variable.outputs.value }}" >> $GITHUB_ENV
+      run: echo "value=${{ steps.get_variable.outputs.VARIABLE }}" >> $GITHUB_OUTPUT
+
+    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
+      shell: bash
