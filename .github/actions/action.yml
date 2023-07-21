@@ -15,4 +15,4 @@ runs:
       shell: bash
     - name: Set Output
       shell: bash
-      run: echo "value=${{ steps.get_variable.outputs.value }}" >> $GITHUB_ENV
+      run: echo "value=${{ steps.get_variable.outputs.value }}" >> $GITHUB_OUTPUT
