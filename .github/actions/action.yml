@@ -10,7 +10,8 @@ runs:
   steps:
     - name: Get Repository Variable Value
       id: get_variable
-      run: echo ${{ env[inputs.variable-name] }}
+      run: |
+            echo "VARIABLE:  ${{ env[inputs.variable-name] }}"
       shell: bash
     - name: Set Output
       shell: bash
