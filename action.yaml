@@ -11,7 +11,7 @@ runs:
     - name: Get Repository Variable Value
       id: get_variable
       run: |
-             echo "VARIABLE=${{ env[inputs.variable-name] }}" >> $GITHUB_ENV
+             echo "VARIABLE=${{ env['inputs.variable-name'] }}" >> $GITHUB_ENV
       shell: bash
     - name: Set Output
       shell: bash
