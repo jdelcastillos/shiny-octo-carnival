@@ -25,11 +25,11 @@ runs:
   using: 'composite'
   steps:
     - name: "gitflow"
-      if: ${{ (inputs.pattern == 'NAME-i-ENV') }} 
+      if: ${{ (inputs.pattern == NAME-i-ENV) }} 
       run: |
-        if [[ ${{inputs.pattern}} == 'NAME-i-ENV']]; then
+        if [[ ${{inputs.pattern}} == NAME-i-ENV ]]; then
           echo "NAME=${{inputs.name}}-${{inputs.index}}-${{inputs.environment}}" >> $GITHUB_ENV
-        elif [[ ${{inputs.pattern}} == 'NAME-ENV-i' ]]; then
+        elif [[ ${{inputs.pattern}} == NAME-ENV-i ]]; then
           echo "NAME=${{inputs.name}}-${{inputs.environment}}-${{inputs.index}}" >> $GITHUB_ENV
         fi
       shell: bash
