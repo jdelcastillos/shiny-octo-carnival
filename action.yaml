@@ -34,7 +34,9 @@ runs:
         fi
       shell: bash
     - id: output
-      run: echo "NAME=$NAME" >> $GITHUB_OUTPUT
+      run: |
+              echo "NAME=$NAME" >> $GITHUB_OUTPUT
+              echo "NAME=$NAME"
       shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
