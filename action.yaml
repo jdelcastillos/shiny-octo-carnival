@@ -1,21 +1,40 @@
-name: 'Get Repository Variable'
-description: 'Get the value of a repository variable'
+name: 'generateNameBasedPattern'
+description: 'Get the name of a service name or task name based on pattern'
 inputs:
-  variable-name:
-    description: 'Name of the repository variable'
+  name:
+    description: 'Name of the componente'
     required: true
     default: ''
+  environment:
+    description: 'Environment'
+    required: true
+    default: ''
+  index:
+    description: 'index or complementary text'
+    required: true
+    default: ''
+  pattern:
+    description: 'Pattern to return the name'
+    required: true
+    default: ''
+outputs:
+  name:
+    description: "Environment target"
+    value: ${{ steps.output.outputs.NAME }}
 runs:
   using: 'composite'
   steps:
-    - name: Get Repository Variable Value
-      id: get_variable
+    - name: "gitflow"
+      if: ${{ (inputs.pattern == 'NAME-i-ENV') }} 
       run: |
-             echo "VARIABLE=${{vars.HOLA_CHAU}}" >> $GITHUB_ENV
+        if [[ ${{inputs.pattern}} == 'NAME-i-ENV']]; then
+          echo "NAME=${{inputs.name}}-${{inputs.index}}-${{inputs.environment}}" >> $GITHUB_ENV
+        elif [[ ${{inputs.pattern}} == 'NAME-ENV-i' ]]; then
+          echo "NAME=${{inputs.name}}-${{inputs.environment}}-${{inputs.index}}" >> $GITHUB_ENV
+        fi
       shell: bash
-    - name: Set Output
+    - id: output
+      run: echo "NAME=$NAME" >> $GITHUB_OUTPUT
       shell: bash
-      run: echo "value=${{ steps.get_variable.outputs.VARIABLE }}" >> $GITHUB_OUTPUT
-
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
